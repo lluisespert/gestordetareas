@@ -32,6 +32,8 @@
                                 <div class="form-group text-center">  
                                     <input type="submit" name="submit" class="btn btn-dark btn-lg btn-block" value="Conectar">
                                 </div>
+                                <br>
+                                <br>
                             </form>
                         </div> 
                     </div>
