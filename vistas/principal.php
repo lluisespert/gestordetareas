@@ -14,7 +14,6 @@
         <br>
         <br>
         <div id="login">
-            <h3 class="text-center text-white">Gestor de Tareas</h3>
             <div class="container">
                 <div id="login-row" class="row justify-content-center align-items-center">
                     <div id="login-column" class="col-md-6">
