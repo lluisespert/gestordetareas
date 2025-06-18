@@ -71,3 +71,99 @@ body {
   margin-top: 4px;
   text-shadow: 0 1px 2px #fff;
 }
+.login-3d-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+}
+
+.login-3d-card {
+  width: 350px;
+  height: 400px;
+  perspective: 1200px;
+  position: relative;
+}
+
+.login-form,
+.login-3d-back {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  padding: 40px 30px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  transition: transform 1s cubic-bezier(.4,2,.6,1);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transform: rotateY(0deg);
+}
+
+.login-3d-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #232526;
+  color: #fff;
+  font-size: 1.5rem;
+  transform: rotateY(180deg);
+}
+
+.login-3d-card.flipped .login-form {
+  transform: rotateY(180deg);
+}
+
+.login-3d-card.flipped .login-3d-back {
+  transform: rotateY(0deg);
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+.input:focus {
+  border: 1.5px solid #232526;
+  outline: none;
+}
+
+.btn {
+  background: linear-gradient(90deg, #232526 0%, #414345 100%);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: linear-gradient(90deg, #414345 0%, #232526 100%);
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  display: block;
+}

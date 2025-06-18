@@ -25,23 +25,23 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $conn->prepare("SELECT contrasena FROM usuarios WHERE usuario = :usuario");
+    // Comprobar si el usuario ya existe
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM usuarios WHERE usuario = :usuario");
     $stmt->bindParam(':usuario', $usuario, PDO::PARAM_STR);
     $stmt->execute();
-
-    $hash = $stmt->fetchColumn();
-
-    // Comprobar si el hash tiene el formato de password_hash (60 caracteres y empieza por $2y$)
-    if ($hash && strlen($hash) === 60 && strpos($hash, '$2y$') === 0) {
-        if (password_verify($contrasena, $hash)) {
-            echo json_encode(['existe' => true]);
-        } else {
-            echo json_encode(['existe' => false]);
-        }
-    } else {
-        // El campo contraseña no es un hash válido
-        echo json_encode(['error' => 'La contraseña almacenada no es un hash válido.']);
+    if ($stmt->fetchColumn() > 0) {
+        echo json_encode(['error' => 'El usuario ya existe']);
+        exit();
     }
+
+    // Insertar el nuevo usuario con la contraseña hasheada
+    $hash = password_hash($contrasena, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare("INSERT INTO usuarios (usuario, contrasena) VALUES (:usuario, :contrasena)");
+    $stmt->bindParam(':usuario', $usuario, PDO::PARAM_STR);
+    $stmt->bindParam(':contrasena', $hash, PDO::PARAM_STR);
+    $stmt->execute();
+
+    echo json_encode(['registrado' => true]);
 } catch (PDOException $e) {
     echo json_encode(['error' => 'Error al conectar con la base de datos']);
 }

@@ -8,5 +8,5 @@ USE gestor_tareas;
 CREATE TABLE usuarios (
     id INT PRIMARY KEY AUTO_INCREMENT,
     usuario VARCHAR(50) NOT NULL,
-    contraseña VARCHAR(100) NOT NULL
+    contrasena VARCHAR(100) NOT NULL
 );
