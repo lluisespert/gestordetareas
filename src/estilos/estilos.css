@@ -1,406 +1,73 @@
-#root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-  }
-  
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
-  }
-  
-  @keyframes logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  @media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-      animation: logo-spin infinite 20s linear;
-    }
-  }
-  
-  .read-the-docs {
-    color: #888;
-  }
-  
-  a.vlink {
-  
-    color : #efefef;
-  
-    position:relative;
-  
-    height:54px;
-  
-    width:72px;
-  
-    text-align:center;
-  
-    line-height:54px;
-  
-    display:block;
-  
-    font-size: 20px;
-  
-  }
-  
-  a.vlink span {
-  
-    position : absolute;
-  
-    opacity: 0;
-  
-    transition : transform 400ms ease-out;
-  
-    margin-left:24px;
-  
-    box-shadow : 2px 4px 3px 1px rgba(0,0,0,0.2);
-  
-  }
-  
-
-  
-  a.vlink span:before {
-  
-    content : '';
-  
-    display:block;
-  
-    width:0;
-  
-    height:0;
-  
-    position:absolute;
-  
-    border-top:8px solid transparent;
-  
-    border-bottom:8px solid transparent;
-  
-    border-right:8px solid #000;
-  
-    left:-12px;
-  
-    top:33%;
-  
-  }
-  a.vlink span:hover {
-  
-    background : #000 !important;
-  
-  }
-  a.vlink:hover {
-  
-    box-shadow : 1px 2px 3px #9d451d;
-  
-    background: rgb(242,130,91); 
-  
-    background: -moz-linear-gradient(left,  rgba(242,130,91,1) 0%, rgba(229,91,43,1) 50%, rgba(240,113,70,1) 100%); 
-  
-    background: -webkit-linear-gradient(left,  rgba(242,130,91,1) 0%,rgba(229,91,43,1) 50%,rgba(240,113,70,1) 100%);
-  
-    background: linear-gradient(to right,  rgba(242,130,91,1) 0%,rgba(229,91,43,1) 50%,rgba(240,113,70,1) 100%); 
-  
-  
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2825b', endColorstr='#f07146',GradientType=1 );
-  
-    width: auto;
-  
-    height: 70px;
-  
-    font-size: 40px;
-  
-  }
-  
-  a.vlink:hover span {
-  
-    opacity:1;
-  
-    width: 220px;
-  
-    transform:translateX(12px);
-  
-    background : #343434;
-  
-    font-size:16px;
-  
-    border-radius:6px;
-  
-    border-left:4px solid #000;
-  
-    padding : 0px 12px 0px 12px;
-  
-  }
-  
-  ul {
-  
-    background: rgb(69,72,77);
-  
-    background: -moz-linear-gradient(left,  rgba(69,72,77,1) 0%, rgba(0,0,0,1) 100%); 
-  
-    background: -webkit-linear-gradient(left,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); 
-  
-    background: linear-gradient(to right,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); 
-  
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=1 ); 
-  
-    box-shadow :-6px 12px 5px 2px rgba(145,145,145,0.5);
-  
-  }
-  
-  
-  .card:hover {
-
-    border-radius: 8px;
-
-    border-width: 4px;
-  
-    border-style: outset;
-  
-    border-color: red;
-  
-    background-color: aqua;
-
-    width: 300px;
-   
-  }
-  
-  .card-title {
-  
-    font-family: 'Brush Script MT', cursive;
-
-    text-align: center;
-
-  }
-  
-  .ocupacion {
-  
-    text-align: center;
-  
-    font-weight: bold;
-  
-    font-style: oblique;
-  
-  }
-  
-  .experienciaYFecha {
-  
-    text-align: justify;
-  
-  }
-  
-  .imgCard {
-  
-    padding: 5px;
-  
-    width: 150px;
-  
-    border: 1px solid #ddd;
-  
-  }
-  
-  .imgCard:hover {
-  
-    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
-  
-  }
-
-  .card {
-
-    border-radius: 8px;
-
-    border-width: 4px;
-
-    border-color: black;
-
-    border-style: outset;
-
-    width: 300px;
-
-  }
-
-  body {
-
-    background-color: #87CEEB;
-
-  }
-
-  .EfectoRelieve {
-
-    text-align: center;
-    font-family: Arial Black;
-    font-weight: bold; 
-    font-size: 30px;
-    background: #202020;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0px 3px 3px rgba(255,255,255,0.4),0px -1px 1px rgba(0,0,0,0.3);
-
-  }
-
-  .ImagenRedonda {
-    border-radius: 50%;
-    width: 300px;
-    height: 300px;
-    border: 10px solid #BEBEBE;
-    padding: 10px;
-  }
-
-  .ImagenRedonda:hover{
-    border: 10px solid greenyellow;
-  }
-
-  .EfectoRelieve:hover{
-    color: #BEBEBE;
-    font-size: 50px;
-  }
- 
-  .Texto {
-    color: #BEBEBE;
-  }
-
-
-
-.playfair-display-uniquifier {
-  font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: italic;
-  font-size: 22px;
-}
-
-.botonFooter {
-  display: inline-block;
-  padding: 15px 25px;
-  font-size: 24px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
-  color: #fff;
-  background-color: #04AA6D;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 9px #999;
-  margin: 10px;
-}
-
-.botonFooter:hover {
-  background-color: #3e8e41
-}
-
-.botonFooter:active {
-  background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-
-.custom-navbar {
-  position: fixed; /* Fija el navbar en la parte superior */
-  top: 0; /* Asegura que esté en la parte superior */
-  left: 50%; /* Posiciona el navbar horizontalmente en el centro */
-  transform: translateX(-50%); /* Ajusta el centro horizontal */
-  width: auto; /* Ajusta el ancho según el contenido */
-  z-index: 1050; /* Asegura que esté por encima del contenido */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Añade una sombra para destacar */
-}
-
-.navbar-nav {
-  gap: 15px; /* Espaciado entre los elementos del menú */
-}
-
-.nav-link {
-  color: white; /* Color inicial del texto */
-  transition: color 0.3s ease; /* Transición suave al cambiar el color */
-}
-
-.nav-link:hover {
-  color: orange; /* Cambia el color a naranja al pasar el ratón */
-}
-
-.container2 {
-  display: flex;
-  justify-content: center; /* Centra las cards horizontalmente */
-  align-items: center; /* Centra las cards verticalmente */
-  flex-wrap: nowrap; /* Evita que las cards se ajusten en varias filas */
-  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
-  gap: 10px; /* Añade una separación uniforme entre las cards */
-  overflow-x: auto; /* Permite desplazamiento horizontal si las cards no caben */
-}
-
-.row {
-  width: 100%; /* Asegura que las cards no se desborden */
-}
-
-.login3d-bg {
+body {
+  background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
 }
 
-.login3d-card {
-  background: rgba(255,255,255,0.15);
-  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 40px 30px;
+.login-form {
+  max-width: 350px;
+  margin: 60px auto;
+  padding: 32px 28px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow:
+    0 8px 24px rgba(30, 136, 229, 0.18),
+    0 1.5px 4px rgba(30, 136, 229, 0.10),
+    0 0.5px 1.5px rgba(30, 136, 229, 0.10);
+  transform: perspective(800px) rotateY(-8deg) rotateX(4deg);
+  transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.4s;
+}
+
+.login-form:hover {
+  transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.03);
+  box-shadow:
+    0 16px 48px rgba(30, 136, 229, 0.22),
+    0 3px 8px rgba(30, 136, 229, 0.13);
+}
+
+.form-group {
+  margin-bottom: 22px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  transition: transform 0.2s cubic-bezier(.25,.8,.25,1);
-  will-change: transform;
-  border: 1px solid rgba(255,255,255,0.18);
 }
 
-.login3d-card h2 {
-  color: #fff;
-  margin-bottom: 24px;
-  letter-spacing: 1px;
-}
-
-.login3d-card input {
-  margin: 10px 0;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: none;
+.input {
+  padding: 10px;
+  border: 1.5px solid #90caf9;
+  border-radius: 6px;
+  font-size: 17px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+  transition: box-shadow 0.3s, border-color 0.3s;
   outline: none;
-  width: 220px;
-  font-size: 1rem;
-  background: rgba(255,255,255,0.25);
-  color: #222;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.login3d-card button {
-  margin-top: 18px;
-  padding: 12px 32px;
-  border-radius: 8px;
-  border: none;
-  background: #2a5298;
+.input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.13);
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #1976d2 60%, #64b5f6 100%);
   color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 17px;
   font-weight: bold;
-  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.13);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
 }
 
-.login3d-card button:hover {
-  background: #1e3c72;
+.btn:hover {
+  background: linear-gradient(90deg, #1565c0 60%, #42a5f5 100%);
+  box-shadow: 0 6px 18px rgba(25, 118, 210, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.error {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 4px;
+  text-shadow: 0 1px 2px #fff;
 }
