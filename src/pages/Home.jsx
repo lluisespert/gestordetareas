@@ -5,7 +5,7 @@ function Home() {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [errores, setErrores] = useState({});
-
+  
   const validar = () => {
     const nuevosErrores = {};
     if (!usuario.trim()) {
@@ -18,10 +18,24 @@ function Home() {
     return Object.keys(nuevosErrores).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validar()) {
-      alert('Formulario válido');
+      try {
+        const response = await fetch('http://localhost/gestordetareas/src/controller/comprobar_usuario.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuario, contrasena })
+        });
+        const data = await response.json();
+        if (data.existe) {
+          alert('Usuario válido');
+        } else {
+          alert('Usuario o contraseña incorrectos');
+        }
+      } catch (error) {
+        alert('Error al conectar con el servidor');
+      }
     }
   };
 
