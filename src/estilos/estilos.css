@@ -167,3 +167,157 @@ body {
   margin-top: 5px;
   display: block;
 }
+
+.bienvenido-h1 {
+  text-align: center;
+  color: #C0C0C0; /* plateado */
+  text-shadow:
+    1px 1px 2px #888,
+    2px 2px 4px #aaa,
+    0 0 10px #fff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+/* Centra el contenido vertical y horizontalmente */
+.bienvenido-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+.botones-contenedor {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Botón 3D moderno */
+.boton-3d {
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(145deg, #b0b0b0 0%, #e0e0e0 100%);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 0 #888, 0 8px 20px #aaa;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px #888;
+}
+
+.boton-3d:active {
+  box-shadow: 0 2px 0 #888, 0 4px 10px #aaa;
+  transform: translateY(4px);
+}
+
+.card-formulario {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  padding: 2rem;
+  margin-top: 2rem;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-formulario form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.card-formulario input,
+.card-formulario textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  resize: none;
+}
+
+/* Contenedor de las cards de tareas en filas y con separación */
+.tareas-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem; /* Espacio entre las cards */
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Card 3D para tareas */
+.card-tarea {
+  background: linear-gradient(135deg, #e0e7ef 0%, #f8fafc 100%);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(80, 80, 120, 0.18), 0 2px 4px #b0b0b0;
+  padding: 1.5rem 2rem;
+  margin: 1rem 0.5rem 2rem 0.5rem;
+  max-width: 420px;
+  width: 100%;
+  border-left: 6px solid #5a8dee;
+  transition: transform 0.15s, box-shadow 0.15s;
+  will-change: transform;
+  perspective: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-tarea:hover {
+  transform: translateY(-6px) scale(1.03) rotateY(2deg);
+  box-shadow: 0 16px 32px rgba(80, 80, 120, 0.22), 0 4px 8px #b0b0b0;
+}
+
+.card-tarea h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2a3b5d;
+  font-size: 1.3rem;
+}
+
+.card-tarea p {
+  margin: 0;
+  color: #4a5876;
+  font-size: 1.05rem;
+}
+
+/* Centrar y separar los botones dentro de la card */
+.botones-tarea {
+  display: flex;
+  gap: 1rem; /* más separación entre botones */
+  margin-top: 1.5rem; /* más separación respecto al contenido de la card */
+  justify-content: center;
+}
+
+/* Botones pequeños y modernos */
+.btn-tarea {
+  background: #e0e7ef;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(80, 80, 120, 0.10);
+  transition: background 0.15s, transform 0.15s;
+}
+
+.btn-tarea:hover {
+  background: #b0b0b0;
+  transform: translateY(-2px) scale(1.08);
+}
+
+.btn-tarea.editar { color: #5a8dee; }
+.btn-tarea.borrar { color: #e74c3c; }
+.btn-tarea.completar { color: #27ae60; }
+.btn-tarea.completar.completada {
+  background: #27ae60;
+  color: #fff;
+}
