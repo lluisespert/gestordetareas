@@ -77,6 +77,14 @@ function Home() {
             {errores.contrasena && <span className="error">{errores.contrasena}</span>}
           </div>
           <button className="btn" type="submit">Iniciar sesión</button>
+          <button
+            className="btn btn-secundario"
+            type="button"
+            onClick={() => navigate("/registro")}
+            style={{ marginTop: "10px" }}
+          >
+            Registrar usuario
+          </button>
           {mensaje && <div className="mensaje">{mensaje}</div>}
         </form>
         <div className="login-3d-back">
