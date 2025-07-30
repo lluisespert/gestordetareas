@@ -11,11 +11,15 @@ function Bienvenido() {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [editandoId, setEditandoId] = useState(null);
 
   const handleInsertarClick = () => {
     setMostrarFormulario(true);
     setMostrarTareas(false);
     setMensaje("");
+    setEditandoId(null);
+    setTitulo("");
+    setDescripcion("");
   };
 
   const handleVerTareasClick = async () => {
@@ -33,26 +37,62 @@ function Bienvenido() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validar campos antes de enviar
+    if (!titulo.trim() || !descripcion.trim()) {
+      setMensaje("Todos los campos son obligatorios.");
+      return;
+    }
     const datos = { titulo, descripcion };
-    const res = await fetch("http://localhost/gestordetareas/src/controller/insertar_tarea.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(datos),
-    });
-    const data = await res.json();
-    if (data.success) {
-      setMensaje("Tarea insertada correctamente.");
-      setTitulo("");
-      setDescripcion("");
-      setMostrarFormulario(false);
+    if (editandoId) {
+      // Editar tarea existente
+      const res = await fetch("http://localhost/gestordetareas/src/controller/editar_tarea.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: editandoId, ...datos }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMensaje("Tarea editada correctamente.");
+        await handleVerTareasClick();
+        setEditandoId(null);
+        setTitulo("");
+        setDescripcion("");
+        setMostrarFormulario(false);
+        setMostrarTareas(true);
+      } else {
+        setMensaje(data.error || "Error al editar la tarea.");
+      }
     } else {
-      setMensaje("Error al insertar la tarea.");
+      // Insertar nueva tarea
+      const res = await fetch("http://localhost/gestordetareas/src/controller/insertar_tarea.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMensaje("Tarea insertada correctamente.");
+        setTitulo("");
+        setDescripcion("");
+        setMostrarFormulario(false);
+        setMostrarTareas(true);
+        handleVerTareasClick();
+      } else {
+        setMensaje(data.error || "Error al insertar la tarea.");
+      }
     }
   };
 
-  // Funciones placeholder para los botones de cada tarea
   const handleEditar = (id) => {
-    alert(`Editar tarea ${id} (lógica pendiente)`);
+    const tarea = tareas.find((t) => t.id === id);
+    if (tarea) {
+      setTitulo(tarea.titulo);
+      setDescripcion(tarea.descripcion);
+      setEditandoId(id);
+      setMostrarFormulario(true);
+      setMostrarTareas(false);
+      setMensaje("");
+    }
   };
 
   const handleBorrar = (id) => {
@@ -67,6 +107,13 @@ function Bienvenido() {
     );
   };
 
+  const handleCancelar = () => {
+    setMostrarFormulario(false);
+    setEditandoId(null);
+    setTitulo("");
+    setDescripcion("");
+  };
+
   return (
     <div className="bienvenido-center">
       <h1 className="bienvenido-h1">¡Bienvenido, {usuario} al Gestor de Tareas!</h1>
@@ -77,7 +124,7 @@ function Bienvenido() {
       {mostrarFormulario && (
         <div className="card-formulario">
           <form onSubmit={handleSubmit}>
-            <h2>Insertar nueva tarea</h2>
+            <h2>{editandoId ? "Editar tarea" : "Insertar nueva tarea"}</h2>
             <input
               type="text"
               placeholder="Título"
@@ -91,8 +138,8 @@ function Bienvenido() {
               onChange={(e) => setDescripcion(e.target.value)}
               required
             />
-            <button className="boton-3d" type="submit">Guardar</button>
-            <button className="boton-3d" type="button" onClick={() => setMostrarFormulario(false)}>Cancelar</button>
+            <button className="boton-3d" type="submit">{editandoId ? "Guardar cambios" : "Guardar"}</button>
+            <button className="boton-3d" type="button" onClick={handleCancelar}>Cancelar</button>
           </form>
         </div>
       )}
