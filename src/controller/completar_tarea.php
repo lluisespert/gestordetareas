@@ -25,18 +25,46 @@ if ($id > 0) {
     $response['success'] = false;
     $response['error'] = "Error de conexión.";
   } else {
-    $sql = "UPDATE tareas SET completada = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $estado = $completada ? 1 : 0;
-    $stmt->bind_param("ii", $estado, $id);
-    if ($stmt->execute()) {
-      $response['success'] = true;
-      $response['completada'] = $estado;
-    } else {
+    // 🔍 Consultamos el estado anterior
+    $sql_select = "SELECT titulo, descripcion, completada FROM tareas WHERE id = ?";
+    $stmt_select = $conn->prepare($sql_select);
+    $stmt_select->bind_param("i", $id);
+    $stmt_select->execute();
+    $resultado = $stmt_select->get_result();
+    $tarea = $resultado->fetch_assoc();
+    $stmt_select->close();
+
+    if (!$tarea) {
       $response['success'] = false;
-      $response['error'] = "Error al actualizar la tarea.";
+      $response['error'] = "Tarea no encontrada.";
+    } else {
+      // ✅ Si pasa de incompleta a completada, enviamos correo
+      $estado_anterior = boolval($tarea['completada']);
+      $estado_nuevo = $completada;
+
+      if (!$estado_anterior && $estado_nuevo) {
+        $to = "espertcuquerellalluis@gmail.com"; 
+        $subject = "Tarea completada";
+        $message = "La tarea '{$tarea["titulo"]}' ha sido marcada como completada.\nDescripción: {$tarea["descripcion"]}";
+        $headers = "From: notificaciones@tuservidor.com";
+        mail($to, $subject, $message, $headers);
+      }
+
+      // 🔄 Actualizamos el estado
+      $sql_update = "UPDATE tareas SET completada = ? WHERE id = ?";
+      $stmt_update = $conn->prepare($sql_update);
+      $estado = $completada ? 1 : 0;
+      $stmt_update->bind_param("ii", $estado, $id);
+      if ($stmt_update->execute()) {
+        $response['success'] = true;
+        $response['completada'] = $estado;
+      } else {
+        $response['success'] = false;
+        $response['error'] = "Error al actualizar la tarea.";
+      }
+      $stmt_update->close();
     }
-    $stmt->close();
+
     $conn->close();
   }
 } else {
@@ -46,4 +74,3 @@ if ($id > 0) {
 
 // ✅ Respuesta JSON
 echo json_encode($response);
-?>
