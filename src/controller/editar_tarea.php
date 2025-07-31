@@ -1,44 +1,39 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+header("Content-Type: application/json");
 
-// Incluir la configuración de la base de datos (debe definir $mysqli)
 require_once 'config.php';
 
-// Recibir datos JSON
-$data = json_decode(file_get_contents("php://input"), true);
+$input = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['id']) || !isset($data['titulo']) || !isset($data['descripcion'])) {
-    echo json_encode(['success' => false, 'error' => 'Datos incompletos']);
-    exit();
-}
+$id = intval($input["id"] ?? 0);
+$titulo = $input["titulo"] ?? '';
+$descripcion = $input["descripcion"] ?? '';
+$fecha_vencimiento = $input["fecha_vencimiento"] ?? '';
 
-$id = intval($data['id']);
-$titulo = $data['titulo'];
-$descripcion = $data['descripcion'];
-
-// Usar la variable $mysqli definida en config.php
-$conexion = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-if ($conexion->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Conexión fallida']);
+if ($id === 0 || empty($titulo) || empty($descripcion) || empty($fecha_vencimiento)) {
+    echo json_encode(["success" => false, "message" => "Datos incompletos para editar."]);
     exit;
 }
 
+$conexion = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if ($conexion->connect_error) {
+    echo json_encode(["success" => false, "message" => "Conexión fallida: " . $conexion->connect_error]);
+    exit;
+}
 
-$stmt = $conexion->prepare("UPDATE tareas SET titulo = ?, descripcion = ? WHERE id = ?");
-$stmt->bind_param("ssi", $titulo, $descripcion, $id);
+$fecha_mysql = date("Y-m-d H:i:s", strtotime($fecha_vencimiento));
+
+$stmt = $conexion->prepare("UPDATE tareas SET titulo = ?, descripcion = ?, fecha_vencimiento = ? WHERE id = ?");
+$stmt->bind_param("sssi", $titulo, $descripcion, $fecha_mysql, $id);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true]);
+    echo json_encode(["success" => true]);
 } else {
-    echo json_encode(['success' => false, 'error' => 'No se pudo actualizar la tarea']);
+    echo json_encode(["success" => false, "message" => "Error al editar tarea."]);
 }
 
 $stmt->close();
-$mysqli->close();
+$conexion->close();
 ?>

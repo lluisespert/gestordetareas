@@ -1,43 +1,55 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Content-Type: application/json');
-
-// Manejar preflight (OPTIONS)
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+// Encabezados CORS
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
 
 require_once 'config.php';
 
-// Obtener los datos JSON enviados desde el frontend
+// Obtener los datos enviados por JSON desde el frontend
 $input = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($input['titulo']) || !isset($input['descripcion'])) {
-    echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
+// Validar existencia de claves
+$titulo = $input["titulo"] ?? '';
+$descripcion = $input["descripcion"] ?? '';
+$fecha_vencimiento = $input["fecha_vencimiento"] ?? '';
+
+if (empty($titulo) || empty($descripcion) || empty($fecha_vencimiento)) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Todos los campos son obligatorios."
+    ]);
     exit;
 }
 
-$titulo = $input['titulo'];
-$descripcion = $input['descripcion'];
-
+// Crear conexión
 $conexion = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($conexion->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Conexión fallida']);
+    echo json_encode([
+        "success" => false,
+        "message" => "Conexión fallida: " . $conexion->connect_error
+    ]);
     exit;
 }
 
-$stmt = $conexion->prepare("INSERT INTO tareas (titulo, descripcion) VALUES (?, ?)");
-$stmt->bind_param("ss", $titulo, $descripcion);
+// Convertir fecha ISO a formato MySQL (Y-m-d H:i:s)
+$fecha_mysql = date("Y-m-d H:i:s", strtotime($fecha_vencimiento));
+
+// Preparar consulta segura
+$stmt = $conexion->prepare("
+    INSERT INTO tareas (titulo, descripcion, fecha_vencimiento, completada)
+    VALUES (?, ?, ?, 0)
+");
+$stmt->bind_param("sss", $titulo, $descripcion, $fecha_mysql);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true]);
+    echo json_encode(["success" => true]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Error al insertar']);
+    echo json_encode([
+        "success" => false,
+        "message" => "Error al insertar la tarea."
+    ]);
 }
 
 $stmt->close();
 $conexion->close();
-?>
