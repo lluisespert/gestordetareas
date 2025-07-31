@@ -321,3 +321,11 @@ body {
   background: #27ae60;
   color: #fff;
 }
+
+.btn-tarea.deshabilitado {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

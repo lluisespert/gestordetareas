@@ -13,6 +13,16 @@ function Bienvenido() {
   const [mensaje, setMensaje] = useState("");
   const [editandoId, setEditandoId] = useState(null);
 
+  const cargarTareas = async () => {
+    try {
+      const res = await fetch("http://localhost/gestordetareas/src/controller/tareas.php");
+      const data = await res.json();
+      setTareas(data);
+    } catch (error) {
+      setMensaje("Error al obtener las tareas.");
+    }
+  };
+
   const handleInsertarClick = () => {
     setMostrarFormulario(true);
     setMostrarTareas(false);
@@ -26,66 +36,48 @@ function Bienvenido() {
     setMostrarFormulario(false);
     setMostrarTareas(true);
     setMensaje("");
-    try {
-      const res = await fetch("http://localhost/gestordetareas/src/controller/tareas.php");
-      const data = await res.json();
-      setTareas(data);
-    } catch (error) {
-      setMensaje("Error al obtener las tareas.");
-    }
+    await cargarTareas();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validar campos antes de enviar
     if (!titulo.trim() || !descripcion.trim()) {
       setMensaje("Todos los campos son obligatorios.");
       return;
     }
+
     const datos = { titulo, descripcion };
-    if (editandoId) {
-      // Editar tarea existente
-      const res = await fetch("http://localhost/gestordetareas/src/controller/editar_tarea.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: editandoId, ...datos }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setMensaje("Tarea editada correctamente.");
-        await handleVerTareasClick();
-        setEditandoId(null);
-        setTitulo("");
-        setDescripcion("");
-        setMostrarFormulario(false);
-        setMostrarTareas(true);
-      } else {
-        setMensaje(data.error || "Error al editar la tarea.");
-      }
+    const url = editandoId
+      ? "http://localhost/gestordetareas/src/controller/editar_tarea.php"
+      : "http://localhost/gestordetareas/src/controller/insertar_tarea.php";
+    const payload = editandoId ? { id: editandoId, ...datos } : datos;
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      setMensaje(editandoId ? "Tarea editada correctamente." : "Tarea insertada correctamente.");
+      setEditandoId(null);
+      setTitulo("");
+      setDescripcion("");
+      setMostrarFormulario(false);
+      setMostrarTareas(true);
+      await cargarTareas();
     } else {
-      // Insertar nueva tarea
-      const res = await fetch("http://localhost/gestordetareas/src/controller/insertar_tarea.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setMensaje("Tarea insertada correctamente.");
-        setTitulo("");
-        setDescripcion("");
-        setMostrarFormulario(false);
-        setMostrarTareas(true);
-        handleVerTareasClick();
-      } else {
-        setMensaje(data.error || "Error al insertar la tarea.");
-      }
+      setMensaje(data.error || "Error al guardar la tarea.");
     }
   };
 
   const handleEditar = (id) => {
     const tarea = tareas.find((t) => t.id === id);
-    if (tarea) {
+    if (tarea && !tarea.completada) {
+      const confirmar = window.confirm(`¿Quieres editar la tarea "${tarea.titulo}"?`);
+      if (!confirmar) return;
+
       setTitulo(tarea.titulo);
       setDescripcion(tarea.descripcion);
       setEditandoId(id);
@@ -95,23 +87,51 @@ function Bienvenido() {
     }
   };
 
-  const handleBorrar = (id) => {
-    alert(`Borrar tarea ${id} (lógica pendiente)`);
+  const handleBorrar = async (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que quieres borrar esta tarea?");
+    if (!confirmar) return;
+
+    try {
+      const res = await fetch("http://localhost/gestordetareas/src/controller/borrar_tarea.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMensaje("Tarea borrada correctamente.");
+        await cargarTareas();
+      } else {
+        setMensaje(data.error || "Error al borrar la tarea.");
+      }
+    } catch (error) {
+      setMensaje("Error de conexión al borrar la tarea.");
+    }
   };
 
-  const handleCompletar = (id, completada) => {
-    alert(
-      completada
-        ? `Marcar como NO completada la tarea ${id} (lógica pendiente)`
-        : `Marcar como completada la tarea ${id} (lógica pendiente)`
-    );
-  };
+  const handleCompletar = async (id, completada) => {
+    const mensajeConfirmacion = completada
+      ? "¿Marcar esta tarea como NO completada?"
+      : "¿Marcar esta tarea como COMPLETADA? Una vez completada no podrás modificarla.";
+    const confirmar = window.confirm(mensajeConfirmacion);
+    if (!confirmar) return;
 
-  const handleCancelar = () => {
-    setMostrarFormulario(false);
-    setEditandoId(null);
-    setTitulo("");
-    setDescripcion("");
+    try {
+      const res = await fetch("http://localhost/gestordetareas/src/controller/completar_tarea.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, completada: !completada }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMensaje("Tarea actualizada.");
+        await cargarTareas();
+      } else {
+        setMensaje(data.error || "Error al actualizar la tarea.");
+      }
+    } catch (error) {
+      setMensaje("Error de conexión al completar la tarea.");
+    }
   };
 
   return (
@@ -121,6 +141,7 @@ function Bienvenido() {
         <button className="boton-3d" onClick={handleInsertarClick}>Insertar tarea</button>
         <button className="boton-3d" onClick={handleVerTareasClick}>Ver tareas</button>
       </div>
+
       {mostrarFormulario && (
         <div className="card-formulario">
           <form onSubmit={handleSubmit}>
@@ -138,11 +159,16 @@ function Bienvenido() {
               onChange={(e) => setDescripcion(e.target.value)}
               required
             />
-            <button className="boton-3d" type="submit">{editandoId ? "Guardar cambios" : "Guardar"}</button>
-            <button className="boton-3d" type="button" onClick={handleCancelar}>Cancelar</button>
+            <button className="boton-3d" type="submit">
+              {editandoId ? "Guardar cambios" : "Guardar"}
+            </button>
+            <button className="boton-3d" type="button" onClick={handleVerTareasClick}>
+              Lista de Tareas
+            </button>
           </form>
         </div>
       )}
+
       {mostrarTareas && (
         <div className="tareas-lista">
           {tareas.length === 0 ? (
@@ -154,9 +180,10 @@ function Bienvenido() {
                 <p>{tarea.descripcion}</p>
                 <div className="botones-tarea">
                   <button
-                    className="btn-tarea editar"
-                    title="Modificar"
+                    className={`btn-tarea editar ${tarea.completada ? "deshabilitado" : ""}`}
+                    title={tarea.completada ? "Tarea completada. No se puede editar." : "Modificar"}
                     onClick={() => handleEditar(tarea.id)}
+                    disabled={tarea.completada}
                   >
                     ✏️
                   </button>

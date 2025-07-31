@@ -9,12 +9,17 @@ if ($conexion->connect_error) {
 }
 
 $tareas = [];
-$sql = "SELECT id, titulo, descripcion FROM tareas";
+$sql = "SELECT id, titulo, descripcion, completada FROM tareas";
 $resultado = $conexion->query($sql);
 
 if ($resultado) {
     while ($fila = $resultado->fetch_assoc()) {
-        $tareas[] = $fila;
+        $tareas[] = [
+            "id" => intval($fila["id"]),
+            "titulo" => $fila["titulo"],
+            "descripcion" => $fila["descripcion"],
+            "completada" => boolval($fila["completada"])
+        ];
     }
     echo json_encode($tareas);
 } else {
